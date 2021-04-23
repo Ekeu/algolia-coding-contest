@@ -2,7 +2,7 @@
   "name": "algolia-contest-booking-app",
   "version": "1.0.0",
   "description": "Unity app for algolia coding contest",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "node server/server.js",
     "server": "nodemon server/server.js",
