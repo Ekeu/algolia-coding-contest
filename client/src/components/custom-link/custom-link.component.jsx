@@ -25,7 +25,7 @@ const CustomLink = ({ url, customStyles, children, type, ...otherProps }) => {
       <Link
         to={url}
         {...otherProps}
-        className={`${customStyles} whitespace-nowrap inline-flex items-center justify-center border border-transparent rounded-md shadow-sm fon-hind`}
+        className={`${customStyles} inline-flex items-center justify-center rounded-md shadow-sm font-hind`}
       >
         {children}
       </Link>

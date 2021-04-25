@@ -45,7 +45,7 @@ const SignIn = ({ history }) => {
           Welcome {res.data.userName}! Happy to see you back!
         </Notification>
       );
-      history.push('/');
+      history.push('/dashboard');
     } catch (error) {
       if (error.response.status === 400) {
         setLoading(false);

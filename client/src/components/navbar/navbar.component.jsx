@@ -23,7 +23,7 @@ const Navbar = () => {
 
   const signOut = () => {
     dispatch({
-      type: 'USER_SIGN_OUT'
+      type: 'USER_SIGN_OUT',
     });
     window.localStorage.removeItem('currentUser');
     history.push('/signin');
@@ -97,7 +97,7 @@ const Navbar = () => {
                         >
                           <Menu.Items
                             static
-                            className='origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'
+                            className='z-20 origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'
                           >
                             <Menu.Item>
                               {({ active }) => (
@@ -143,7 +143,7 @@ const Navbar = () => {
                   <CustomLink
                     to='/signin'
                     type='link-button'
-                    customStyles='ml-3 px-4 py-2  text-base font-hind font-medium text-white bg-indigo-500 hover:bg-indigo-600'
+                    customStyles='ml-3 px-4 py-2 text-sm border border-transparent font-hind font-medium text-white bg-indigo-500 hover:bg-indigo-600'
                   >
                     Sign in
                   </CustomLink>

@@ -31,7 +31,7 @@ const userSchema = new Schema(
     stripe_session: {},
   },
   {
-    timestams: true,
+    timestamps: true,
   }
 );
 
