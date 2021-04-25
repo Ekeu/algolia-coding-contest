@@ -14,7 +14,7 @@ const CustomLink = ({ url, customStyles, children, type, ...otherProps }) => {
         className={`w-full text-left block px-4 py-2 ${
           customStyles
             ? customStyles
-            : 'text-sm text-blue-gray-700 hover:bg-blue-gray-100'
+            : 'text-sm text-gray-700 hover:bg-gray-100'
         } font-hind focus:outline-none`}
       >
         {children}

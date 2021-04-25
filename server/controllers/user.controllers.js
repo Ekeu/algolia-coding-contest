@@ -1,4 +1,5 @@
 const User = require('../models/user.model');
+const { generateToken } = require('../utils/generateToken');
 
 /**
  * @desc Signup a new user
@@ -19,14 +20,52 @@ const signupUser = async (req, res) => {
 
   try {
     await newUser.save();
-    console.log('Created user ==> ', newUser);
     return res.json({ ok: true });
   } catch (error) {
-    console.log('User creation failed ==> ', error.message);
     return res.status(400).send('An error occured. Please try again.');
   }
 };
 
+// @desc Auth user and get a token
+// @route POST /api/v1/signin
+// @access Public
+const signinUser = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findOne({ email }).exec();
+    if (!user) res.status(400).send('Invalid Email or Password');
+
+    if (user && (await user.matchPassword(password))) {
+      res.json({
+        _id: user._id,
+        userName: user.userName,
+        email: user.email,
+        photoURL: user.photoURL,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+        token: generateToken(user._id),
+      });
+    }
+  } catch (error) {
+    res.status(401).send('Invalid Email or Password');
+  }
+
+  /* if (user && (await user.matchPassword(password))) {
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      token: generateToken(user._id),
+    });
+  } else {
+    
+    throw new Error('Invalid email or password');
+  } */
+};
+
 module.exports = {
   signupUser,
+  signinUser,
 };

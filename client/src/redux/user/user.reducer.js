@@ -1,6 +1,12 @@
 import UserActionTypes from './user.types';
 
-const INITIAL_STATE = {};
+let INITIAL_STATE;
+
+if (window.localStorage.getItem('currentUser')) {
+  INITIAL_STATE = JSON.parse(window.localStorage.getItem('currentUser'));
+} else {
+  INITIAL_STATE = null;
+}
 
 const userReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
@@ -10,10 +16,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
         ...action.payload,
       };
     case UserActionTypes.USER_SIGN_OUT:
-      return {
-        ...state,
-        ...action.payload,
-      };
+      return null;
     default:
       return state;
   }

@@ -2,17 +2,33 @@ import React, { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import Logo from '../../assets/images/unity-logo.svg';
 
 import SearchInput from '../search-input/search-input.component';
 import CustomLink from '../custom-link/custom-link.component';
+import MobileHeader from '../mobile-header/mobile-header.component';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-const Navbar = ({ currentUser }) => {
+const Navbar = () => {
+  const { currentUser } = useSelector((state) => ({ ...state }));
+
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const signOut = () => {
+    dispatch({
+      type: 'USER_SIGN_OUT'
+    });
+    window.localStorage.removeItem('currentUser');
+    history.push('/signin');
+  };
+
   return (
     <Disclosure as='nav' className='bg-white shadow'>
       {({ open }) => (
@@ -62,11 +78,11 @@ const Navbar = ({ currentUser }) => {
                         <div>
                           <Menu.Button className='bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
                             <span className='sr-only'>Open user menu</span>
-                            {/* <img
+                            <img
                               className='h-8 w-8 rounded-full'
-                              src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                              alt=''
-                            /> */}
+                              src={currentUser.photoURL}
+                              alt={currentUser.userName}
+                            />
                           </Menu.Button>
                         </div>
                         <Transition
@@ -110,7 +126,11 @@ const Navbar = ({ currentUser }) => {
                               )}
                             </Menu.Item>
                             <Menu.Item>
-                              <CustomLink type='button' role='menuitem'>
+                              <CustomLink
+                                type='button'
+                                role='menuitem'
+                                onClick={signOut}
+                              >
                                 Sign out
                               </CustomLink>
                             </Menu.Item>
@@ -131,6 +151,7 @@ const Navbar = ({ currentUser }) => {
               </div>
             </div>
           </div>
+          <MobileHeader signOut={signOut} />
         </>
       )}
     </Disclosure>

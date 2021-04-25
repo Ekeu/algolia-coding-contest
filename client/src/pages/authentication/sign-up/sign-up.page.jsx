@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 
 import Logo from '../../../assets/images/unity-logo.svg';
+
+import { signup } from '../../../redux/user/user.actions';
+
 import FormInput from '../../../components/form-input/form-input.component';
 import CustomButton from '../../../components/custom-button/custom-button.component';
 import Notification from '../../../components/notification/notification.component';
 
 const SignUp = ({ history }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -19,23 +22,16 @@ const SignUp = ({ history }) => {
   } = useForm();
 
   const onSubmit = handleSubmit(async ({ userName, email, password }) => {
-    const photoURL = `https://robohash.org/${email}.png?set=set3&size=150x150`;
     try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      };
-      await axios.post(
-        '/api/v1',
-        {
-          userName,
-          email,
-          password,
-          photoURL,
-        },
-        config
-      );
+      setLoading(true);
+      const photoURL = `https://robohash.org/${email}.png?set=set3&size=150x150`;
+      await signup({
+        userName,
+        email,
+        password,
+        photoURL,
+      });
+      setLoading(false);
       toast(
         <Notification success headline='Registration succeeded!'>
           Thank you for joining Unity Booking App! Please Sign in
@@ -50,6 +46,7 @@ const SignUp = ({ history }) => {
             {error.response.data}
           </Notification>
         );
+      setLoading(false);
     }
   });
 
@@ -150,7 +147,7 @@ const SignUp = ({ history }) => {
               passwordEyeIcon
             />
             <div>
-              <CustomButton type='submit'>Sign in</CustomButton>
+              <CustomButton type='submit' loading={loading}>Sign up</CustomButton>
             </div>
           </form>
 
