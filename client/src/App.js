@@ -11,6 +11,7 @@ import Signup from './pages/authentication/sign-up/sign-up.page';
 import Dashboard from './pages/user/dashboard/dashboard.page';
 import DashboardResources from './pages/user/dashboard/dashboard-my-resources';
 import CreateHotel from './pages/hotels/create-hotel.component';
+import StripeCallback from './pages/stripe/stripe-callback.component';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           component={DashboardResources}
         />
         <PrivateRoute exact path='/hotels/new' component={CreateHotel} />
+        <PrivateRoute exact path='/stripe/callback' component={StripeCallback} />
       </Switch>
     </>
   );

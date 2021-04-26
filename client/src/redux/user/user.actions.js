@@ -16,3 +16,11 @@ export const signin = async (user) => {
   };
   return await axios.post('/api/v1/signin', user, config);
 };
+export const updateCurrentUserInLocalStorage = (user, next) => {
+  if(localStorage.getItem('currentUser')) {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const updatedCurrentUser = {...currentUser, ...user}
+    localStorage.setItem('currentUser', JSON.stringify((updatedCurrentUser)))
+    next()
+  }
+}

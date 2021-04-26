@@ -32,7 +32,7 @@ const CustomButton = forwardRef(
         customStyles
           ? customStyles
           : 'border-transparent text-white bg-gradient-to-r from-indigo-500 to-indigo-700'
-      } w-full flex justify-center py-3 px-5 border rounded-md shadow-sm text-base font-medium focus:outline-none ${addStyles}`}
+      } w-full flex justify-center py-2 px-4 border rounded-md shadow-sm text-base font-medium focus:outline-none ${addStyles}`}
     >
       {loading ? (
         <Loader

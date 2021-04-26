@@ -21,6 +21,9 @@ module.exports = {
         'cool-gray': colors.coolGray,
         'blue-gray': colors.blueGray,
       },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+      },
     },
   },
   variants: {

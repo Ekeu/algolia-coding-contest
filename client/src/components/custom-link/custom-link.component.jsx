@@ -11,7 +11,7 @@ const CustomLink = ({ url, customStyles, children, type, ...otherProps }) => {
     Component = (
       <button
         {...otherProps}
-        className={`w-full text-left block px-4 py-2 ${
+        className={`w-full text-left px-4 py-2 ${
           customStyles
             ? customStyles
             : 'text-sm text-gray-700 hover:bg-gray-100'
@@ -25,7 +25,7 @@ const CustomLink = ({ url, customStyles, children, type, ...otherProps }) => {
       <Link
         to={url}
         {...otherProps}
-        className={`${customStyles} inline-flex items-center justify-center rounded-md shadow-sm font-hind`}
+        className={`${customStyles} inline-flex items-center justify-center rounded-md shadow-sm font-hind  focus:outline-none`}
       >
         {children}
       </Link>

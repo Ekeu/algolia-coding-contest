@@ -7,7 +7,9 @@ import {
   AtSymbolIcon,
   ScaleIcon,
   PlusIcon,
+  CreditCardIcon,
 } from '@heroicons/react/solid';
+
 import CustomLink from '../custom-link/custom-link.component';
 
 const StripeConnect = () => {
@@ -67,18 +69,32 @@ const StripeConnect = () => {
               </div>
             </div>
             <div className='mt-6 font-hind flex space-x-3 md:mt-0 md:ml-4'>
-              <CustomLink
-                type='link-button'
-                url='/hotels/new'
-                customStyles='px-4 py-2 border border-gray-300 font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none'
-              >
-                <PlusIcon className='-ml-1 mr-2 h-5 w-5' aria-hidden='true' />
-                Add Hotel
-              </CustomLink>
+              {currentUser?.stripe_seller?.charges_enabled ? (
+                <CustomLink
+                  type='link-button'
+                  url='/hotels/new'
+                  customStyles='px-4 py-2 border border-gray-300 font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none'
+                >
+                  <PlusIcon className='-ml-1 mr-2 h-5 w-5' aria-hidden='true' />
+                  Add Hotel
+                </CustomLink>
+              ) : (
+                <CustomLink
+                  type='link-button'
+                  url='/connect'
+                  customStyles='px-4 py-2 border border-gray-300 font-medium text-gray-700 bg-white hover:bg-gray-50'
+                >
+                  <CreditCardIcon
+                    className='-ml-1 mr-2 h-5 w-5'
+                    aria-hidden='true'
+                  />
+                  Connect to Stripe
+                </CustomLink>
+              )}
               <CustomLink
                 type='link-button'
                 url={'/'}
-                customStyles='px-4 py-2 border border-transparent font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none'
+                customStyles='px-4 py-2 border border-transparent font-medium text-white bg-gradient-to-r from-indigo-500 to-indigo-700'
               >
                 Explore Unity
               </CustomLink>

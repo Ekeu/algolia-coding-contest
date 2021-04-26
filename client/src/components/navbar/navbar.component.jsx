@@ -143,7 +143,7 @@ const Navbar = () => {
                   <CustomLink
                     to='/signin'
                     type='link-button'
-                    customStyles='ml-3 px-4 py-2 text-sm border border-transparent font-hind font-medium text-white bg-indigo-500 hover:bg-indigo-600'
+                    customStyles='ml-3 px-4 py-2 text-sm border border-transparent font-hind font-medium text-white bg-gradient-to-r from-indigo-500 to-indigo-700'
                   >
                     Sign in
                   </CustomLink>
