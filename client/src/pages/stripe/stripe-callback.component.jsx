@@ -3,23 +3,30 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import Loader from '../../components/loader/loader.component';
 
-import { getUserStripeAccountStatus } from '../../utils/stripe/stripe'
+import { getUserStripeAccountStatus } from '../../utils/stripe/stripe';
+import { updateCurrentUserInLocalStorage } from '../../redux/user/user.actions';
 
 const StripeCallback = ({ history }) => {
   const { currentUser } = useSelector((state) => ({ ...state }));
   const dispatch = useDispatch();
 
-  const getUserAccountStatus = async () => {
-      try {
-        const res = getUserStripeAccountStatus(currentUser.token)
-        console.log(res)
-      } catch (error) {
-        console.log(error.message)
-      }
-  }
   useEffect(() => {
-    if(currentUser?.token) getUserAccountStatus()
-  }, [currentUser])
+    const getUserAccountStatus = async () => {
+      try {
+        const res = await getUserStripeAccountStatus(currentUser.token);
+        updateCurrentUserInLocalStorage(res.data, () => {
+          dispatch({
+            type: 'USER_SIGN_IN',
+            payload: res.data,
+          });
+          window.location.href = '/dashboard/my/resources';
+        });
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    if (currentUser?.token) getUserAccountStatus();
+  }, [currentUser, dispatch]);
   return (
     <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
       <div className='max-w-3xl mx-auto'>

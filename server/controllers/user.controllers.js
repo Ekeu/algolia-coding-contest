@@ -36,7 +36,7 @@ const signinUser = async (req, res) => {
     const user = await User.findOne({ email }).exec();
     if (!user) res.status(400).send('Invalid Email or Password');
 
-    if (user && (await user.matchPassword(password))) {
+    if(user && (await user.matchPassword(password))) {
       res.json({
         _id: user._id,
         userName: user.userName,
@@ -44,25 +44,17 @@ const signinUser = async (req, res) => {
         photoURL: user.photoURL,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
+        stripe_account_id: user.stripe_account_id,
+        stripe_seller: user.stripe_seller,
+        stripe_session: user.stripe_session,
         token: generateToken(user._id),
       });
+    } else {
+      res.status(400).send('Invalid Email or Password!');
     }
   } catch (error) {
     res.status(401).send('Invalid Email or Password');
   }
-
-  /* if (user && (await user.matchPassword(password))) {
-    res.json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
-      token: generateToken(user._id),
-    });
-  } else {
-    
-    throw new Error('Invalid email or password');
-  } */
 };
 
 module.exports = {

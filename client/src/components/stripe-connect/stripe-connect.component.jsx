@@ -1,28 +1,51 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
-import { greeting } from '../../utils/functions/greeting';
+import { toast } from 'react-toastify';
 import {
   UserGroupIcon,
   AtSymbolIcon,
-  ScaleIcon,
   PlusIcon,
   CreditCardIcon,
 } from '@heroicons/react/solid';
 
 import CustomLink from '../custom-link/custom-link.component';
+import SellerCard from '../seller-cards/seller-cards.component';
+import Notification from '../notification/notification.component';
+import { greeting } from '../../utils/functions/greeting';
+
+import {
+  getUserStripeAccountBalance,
+  payOutSettings,
+} from '../../utils/stripe/stripe';
+import { currencyFormatter } from '../../utils/functions/currencyFormater';
 
 const StripeConnect = () => {
   const { currentUser } = useSelector((state) => ({ ...state }));
-  const cards = [
-    {
-      name: 'Account balance',
-      href: '#',
-      icon: ScaleIcon,
-      amount: '$30,659.45',
-    },
-    // More items...
-  ];
+  const [userStripeBalance, setUserStripeBalance] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    getUserStripeAccountBalance(currentUser.token).then((res) => {
+      setUserStripeBalance(res.data);
+    });
+  }, [currentUser]);
+
+  const handleEditPayoutSettings = async () => {
+    setLoading(true);
+    try {
+      const res = await payOutSettings(currentUser.token);
+      window.location.href = res.data.url;
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      toast(
+        <Notification error headline='Settings Error!'>
+          Unable to access Stripe settings. Try again.
+        </Notification>
+      );
+    }
+  };
   return (
     <main className='flex-1 relative pb-8 z-0 overflow-y-auto'>
       <div className='bg-white'>
@@ -110,46 +133,32 @@ const StripeConnect = () => {
               Overview
             </h2>
             <div className='mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3'>
-              {/* Card */}
-              {cards.map((card) => (
-                <div
-                  key={card.name}
-                  className='bg-white overflow-hidden shadow rounded-lg'
-                >
-                  <div className='p-5'>
-                    <div className='flex items-center'>
-                      <div className='flex-shrink-0'>
-                        <card.icon
-                          className='h-6 w-6 text-gray-400'
-                          aria-hidden='true'
-                        />
-                      </div>
-                      <div className='ml-5 w-0 flex-1'>
-                        <dl>
-                          <dt className='text-sm font-medium text-gray-500 truncate'>
-                            {card.name}
-                          </dt>
-                          <dd>
-                            <div className='text-lg font-medium text-gray-900'>
-                              {card.amount}
-                            </div>
-                          </dd>
-                        </dl>
-                      </div>
-                    </div>
-                  </div>
-                  <div className='bg-gray-50 px-5 py-3'>
-                    <div className='text-sm'>
-                      <a
-                        href={card.href}
-                        className='font-medium text-cyan-700 hover:text-cyan-900'
-                      >
-                        View all
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              ))}
+              <SellerCard
+                status='balance'
+                name='Account balance'
+                amount={currencyFormatter(
+                  userStripeBalance?.available?.[0]?.amount
+                )}
+              />
+              <SellerCard
+                status='pending'
+                name='Pending'
+                amount={currencyFormatter(
+                  userStripeBalance?.pending?.[0]?.amount
+                )}
+              />
+              <SellerCard
+                status='settings'
+                name='Stripe Account'
+                content='Payout Settings'
+                onClick={handleEditPayoutSettings}
+                loading={loading}
+                loaderHeight='h-6'
+                loaderWidth='h-6'
+                linkText='Edit'
+                loaderPrimaryColor='#6366F1'
+                loaderSecondaryColor='#A5B4FC'
+              />
             </div>
           </div>
         </div>
